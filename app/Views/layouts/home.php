@@ -10,6 +10,8 @@
 
 <body>
 
+    <?= $this->include('partials/home-navbar'); ?>
+
     <?= $this->renderSection('content'); ?>
 
     <script src="<?= base_url('assets/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>

@@ -9,7 +9,7 @@
             </li>
         </ul>
 
-        <form action="" method="post" onsubmit="return confirm('Apakah anda yakin ingin keluar?')">
+        <form action="<?= base_url('logout') ?>" method="get" onsubmit="return confirm('Apakah anda yakin ingin keluar?')">
             <button class="w-full mt-4 d-block bg-transparent border-0 fw-bold text-danger px-3">Keluar</button>
         </form>
     </div>
