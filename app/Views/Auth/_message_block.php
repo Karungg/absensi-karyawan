@@ -12,8 +12,8 @@
 
 <?php if (session()->has('errors')) : ?>
 	<ul class="alert alert-danger">
-	<?php foreach (session('errors') as $error) : ?>
-		<li><?= $error ?></li>
-	<?php endforeach ?>
+		<?php foreach (session('errors') as $error) : ?>
+			<li style="list-style: none;"><?= $error ?></li>
+		<?php endforeach ?>
 	</ul>
 <?php endif ?>
