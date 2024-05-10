@@ -2,14 +2,12 @@
 <html lang="en" data-bs-theme="auto">
 
 <head>
-	<script src="../assets/js/color-modes.js"></script>
-
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="">
 	<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
 	<meta name="generator" content="Hugo 0.122.0">
-	<title>Signin Template · Bootstrap v5.3</title>
+	<title>Login | Absensi Karyawan</title>
 
 	<link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sign-in/">
 
@@ -120,7 +118,7 @@
 			</div>
 
 			<button class="btn btn-primary w-100 py-2" type="submit"><?= lang('Auth.loginAction') ?></button>
-			<p class="mt-5 mb-3 text-body-secondary">&copy; 2017–2024</p>
+			<p class="mt-3 mb-3 text-body-secondary">&copy; 2017–2024</p>
 		</form>
 	</main>
 	<script src="<?= base_url('assets/bootstrap/') ?>js/bootstrap.bundle.min.js"></script>
