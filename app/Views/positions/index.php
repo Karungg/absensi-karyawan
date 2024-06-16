@@ -14,7 +14,7 @@
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div>
                         <a href="#" class="btn btn-sm btn-primary">
-                            <span data-feather="plus-circle" class="align-text-bottom me-1"></span>
+                            <span class="align-text-bottom me-1"></span>
                             Tambah Data Jabatan
                         </a>
                     </div>
