@@ -173,7 +173,7 @@ class Auth extends \Myth\Auth\Config\Auth
      *
      * @var bool
      */
-    public $allowRegistration = false;
+    public $allowRegistration = true;
 
     /**
      * --------------------------------------------------------------------
@@ -330,8 +330,8 @@ class Auth extends \Myth\Auth\Config\Auth
      */
     public $passwordValidators = [
         'Myth\Auth\Authentication\Passwords\CompositionValidator',
-        'Myth\Auth\Authentication\Passwords\NothingPersonalValidator',
-        'Myth\Auth\Authentication\Passwords\DictionaryValidator',
+        // 'Myth\Auth\Authentication\Passwords\NothingPersonalValidator',
+        // 'Myth\Auth\Authentication\Passwords\DictionaryValidator',
         // 'Myth\Auth\Authentication\Passwords\PwnedValidator',
     ];
 

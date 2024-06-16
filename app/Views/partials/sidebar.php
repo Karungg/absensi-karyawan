@@ -2,9 +2,13 @@
     <div class="position-sticky pt-3">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">
+                <a class="nav-link <?= str_contains(uri_string(), 'dashboard') ? 'active' : '' ?>" aria-current="page" href="<?= base_url('dashboard') ?>">
                     <span data-feather="home" class="align-text-bottom"></span>
                     Dashboard
+                </a>
+                <a class="nav-link <?= str_contains(uri_string(), 'positions') ? 'active' : '' ?>" aria-current="page" href="<?= base_url('positions') ?>">
+                    <span data-feather="home" class="align-text-bottom"></span>
+                    Jabatan
                 </a>
             </li>
         </ul>

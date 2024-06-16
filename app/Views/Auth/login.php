@@ -109,8 +109,8 @@
 			<?= view('App\Views\Auth\_message_block') ?>
 
 			<div class="form-floating">
-				<input type="email" class="form-control <?php if (session('errors.login')) : ?>is-invalid<?php endif ?>" name="login" placeholder="<?= lang('Auth.email') ?>">
-				<label for="login"><?= lang('Auth.email') ?></label>
+				<input type="text" class="form-control <?php if (session('errors.login')) : ?>is-invalid<?php endif ?>" name="login" placeholder="<?= lang('Auth.email') ?>">
+				<label for="login">Email or Username</label>
 			</div>
 			<div class="form-floating">
 				<input type="password" name="password" class="form-control <?php if (session('errors.password')) : ?>is-invalid<?php endif ?>" name="login" placeholder="<?= lang('Auth.password') ?>">
