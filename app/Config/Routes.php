@@ -14,5 +14,10 @@ $routes->group('', ['filter' => 'role:operator'], static function ($routes) {
     // Positions
     $routes->group('positions', static function ($routes) {
         $routes->get('', 'PositionController::index');
+        $routes->get('create', 'PositionController::create');
+        $routes->post('create', 'PositionController::store');
+        $routes->get('(:segment)/edit', 'PositionController::edit/$1');
+        $routes->put('(:segment)/edit', 'PositionController::update');
+        $routes->delete('delete/(:segment)', 'PositionController::destroy/$1');
     });
 });

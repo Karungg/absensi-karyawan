@@ -13,7 +13,7 @@
                 <h1 class="h2">Jabatan</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div>
-                        <a href="#" class="btn btn-sm btn-primary">
+                        <a href="<?= base_url('positions/create') ?>" class="btn btn-sm btn-primary">
                             <span class="align-text-bottom me-1"></span>
                             Tambah Data Jabatan
                         </a>
@@ -22,27 +22,45 @@
             </div>
 
             <div class="py-4">
+                <?php if (!empty(session()->getFlashdata('success'))) : ?>
+                    <div class="alert alert-success alert-dismissible show fade">
+                        <div class="alert-body">
+                            <button class="close" data-dismiss="alert">
+                                <span>&times;</span>
+                            </button>
+                            <?= session()->getFlashdata('success') ?>
+                        </div>
+                    </div>
+                <?php endif ?>
                 <div class="table-responsive">
-                    <table id="table-1" class="table table-striped" style="width:100%">
+                    <table id="table-1" class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Position</th>
-                                <th>Office</th>
-                                <th>Age</th>
-                                <th>Start date</th>
-                                <th>Salary</th>
+                                <th class="text-center">No</th>
+                                <th class="text-center">Nama Jabatan</th>
+                                <th class="text-center">Created At</th>
+                                <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Tiger Nixon</td>
-                                <td>System Architect</td>
-                                <td>Edinburgh</td>
-                                <td>61</td>
-                                <td>2011-04-25</td>
-                                <td>$320,800</td>
-                            </tr>
+                            <?php
+                            $no = 1;
+                            foreach ($positions as $position) :
+                            ?>
+                                <tr>
+                                    <td class="text-center"><?= $no++ ?></td>
+                                    <td class="text-center"><?= $position['nama_jabatan'] ?></td>
+                                    <td class="text-center"><?= $position['created_at'] ?></td>
+                                    <td class="text-center">
+                                        <a href="<?= base_url('positions/' . $position['id_jabatan']) ?>/edit" class="btn btn-success">Ubah</a>
+                                        <form action="<?= base_url('positions/delete/' . $position['id_jabatan']) ?>" method="post" onsubmit="return confirm('Hapus' + ' <?= $position['nama_jabatan'] ?>?');" style="display: inline;">
+                                            <?= csrf_field() ?>
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <button type="submit" class="btn btn-danger">Hapus</a>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach ?>
                         </tbody>
                     </table>
                 </div>
