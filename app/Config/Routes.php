@@ -19,5 +19,7 @@ $routes->group('', ['filter' => 'role:operator'], static function ($routes) {
         $routes->get('(:segment)/edit', 'PositionController::edit/$1');
         $routes->put('(:segment)/edit', 'PositionController::update');
         $routes->delete('delete/(:segment)', 'PositionController::destroy/$1');
+        $routes->get('export-pdf', 'PositionController::exportPdf');
+        $routes->get('export-excel', 'PositionController::exportExcel');
     });
 });

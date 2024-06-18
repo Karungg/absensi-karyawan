@@ -5,6 +5,9 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\I18n\Time;
+use Dompdf\Dompdf;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
 
 class PositionController extends BaseController
 {
@@ -106,38 +109,35 @@ class PositionController extends BaseController
 
     public function exportPdf()
     {
-        $filename = date('y-m-d') . '-paket';
+        $filename = date('y-m-d') . '-data-jabatan';
         $dompdf = new Dompdf();
-        $dompdf->loadHtml(view('packages/export_pdf', [
-            'packages' => $this->package->findAll()
+        $dompdf->loadHtml(view('positions/export_pdf', [
+            'positions' => $this->db->query('SELECT * FROM jabatan')
+                ->getResultArray()
         ]));
-        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->setPaper('A4', 'potrait');
         $dompdf->render();
         $dompdf->stream($filename);
     }
 
     public function exportExcel()
     {
-        $packages = $this->package->findAll();
+        $positions = $this->db
+            ->query('SELECT * FROM jabatan')
+            ->getResultArray();
 
         $spreadsheet = new Spreadsheet();
         $spreadsheet->setActiveSheetIndex(0)
-            ->setCellValue('A1', 'Nama Paket')
-            ->setCellValue('B1', 'Deskripsi')
-            ->setCellValue('C1', 'Durasi')
-            ->setCellValue('D1', 'Harga');
+            ->setCellValue('A1', 'Nama Jabatan');
 
         $column = 2;
-        foreach ($packages as $data) {
+        foreach ($positions as $data) {
             $spreadsheet->setActiveSheetIndex(0)
-                ->setCellValue('A' . $column, $data['nama_paket'])
-                ->setCellValue('B' . $column, $data['deskripsi'])
-                ->setCellValue('C' . $column, $data['durasi'])
-                ->setCellValue('D' . $column, $data['harga']);
+                ->setCellValue('A' . $column, $data['nama_jabatan']);
             $column++;
         }
         $writer = new Xls($spreadsheet);
-        $fileName = date('d-m-y') . '-paket';
+        $fileName = date('d-m-y') . '-data-jabatan';
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename=' . $fileName . '.xlsx');
