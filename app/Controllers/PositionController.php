@@ -85,10 +85,12 @@ class PositionController extends BaseController
             return redirect()->back()->withInput();
         }
 
-        $this->db->table('jabatan')->update(['id_jabatan' => $this->request->getPost('id_jabatan')], [
-            'nama_jabatan' => $this->request->getPost('nama_jabatan'),
-            'updated_at' => Time::now()
-        ]);
+        $this->db->table('jabatan')
+            ->where('id_jabatan', $this->request->getPost('id_jabatan'))
+            ->update([
+                'nama_jabatan' => $this->request->getPost('nama_jabatan'),
+                'updated_at' => Time::now()
+            ]);
 
         return redirect()->to(site_url('positions'))->with('success', 'Ubah data jabatan berhasil.');
     }

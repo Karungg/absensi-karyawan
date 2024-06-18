@@ -1,5 +1,9 @@
 <?= $this->extend('layouts/app'); ?>
 
+<?= $this->section('title') ?>
+Jabatan
+<?= $this->endSection() ?>
+
 <?= $this->section('content'); ?>
 
 <?= $this->include('partials/navbar'); ?>
@@ -14,7 +18,7 @@
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div>
                         <a href="<?= base_url('positions/create') ?>" class="btn btn-sm btn-primary">
-                            <span class="align-text-bottom me-1"></span>
+                            <span class="align-text-bottom"></span>
                             Tambah Data Jabatan
                         </a>
                     </div>
@@ -23,13 +27,9 @@
 
             <div class="py-4">
                 <?php if (!empty(session()->getFlashdata('success'))) : ?>
-                    <div class="alert alert-success alert-dismissible show fade">
-                        <div class="alert-body">
-                            <button class="close" data-dismiss="alert">
-                                <span>&times;</span>
-                            </button>
-                            <?= session()->getFlashdata('success') ?>
-                        </div>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <?= session()->getFlashdata('success') ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 <?php endif ?>
                 <div class="table-responsive">
