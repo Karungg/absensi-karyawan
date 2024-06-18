@@ -4,19 +4,28 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Entities\User;
+use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\I18n\Time;
 use Myth\Auth\Password;
+use \Myth\Auth\Authorization\GroupModel;
+use \Myth\Auth\Config\Auth as AuthConfig;
 
 class EmployeeController extends BaseController
 {
     protected $db;
+
+    protected $auth;
+
+    protected $config;
 
     protected $helpers = ['form'];
 
     public function __construct()
     {
         $this->db = \Config\Database::connect();
+        $this->config = config('auth');
+        $this->auth = service('authentication');
     }
 
     public function index()
@@ -41,11 +50,9 @@ class EmployeeController extends BaseController
 
     public function store()
     {
-        if (!$this->request->is('post')) {
-            return redirect()->to(site_url('employees/create'));
-        }
+        $users = model(UserModel::class);
 
-        if (!$this->validate([
+        $rules = [
             'nip' => [
                 'rules' => 'required|min_length[18]|is_unique[users.nip]|numeric',
                 'errors' => [
@@ -61,19 +68,19 @@ class EmployeeController extends BaseController
                     'required' => 'Kolom Nama Lengkap harus diisi.',
                 ]
             ],
+            'username' => [
+                'rules' => 'required|alpha_numeric_space|min_length[3]|max_length[30]|is_unique[users.username]',
+                'errors' => [
+                    'required' => 'Kolom Username harus diisi.',
+                    'is_unique' => 'Username sudah tersedia.',
+                ]
+            ],
             'email' => [
                 'rules' => 'required|valid_email|is_unique[users.email]',
                 'errors' => [
                     'required' => 'Kolom Email harus diisi.',
                     'valid_email' => 'Kolom Email harus berisi format email.',
                     'is_unique' => 'Email sudah tersedia.',
-                ]
-            ],
-            'username' => [
-                'rules' => 'required|is_unique[users.username]',
-                'errors' => [
-                    'required' => 'Kolom Username harus diisi.',
-                    'is_unique' => 'Username sudah tersedia.',
                 ]
             ],
             'no_telp' => [
@@ -85,52 +92,62 @@ class EmployeeController extends BaseController
                     'min_length' => 'Nomor Telepon harus berisi minimal 10 angka.',
                 ]
             ],
-        ])) {
-            return redirect()->back()->withInput();
+            'password' => [
+                'rules' => 'required|min_length[4]',
+                'errors' => [
+                    'required' => 'Kolom Password harus diisi.',
+                    'min_length' => 'Nomor Password berisi minimal 4 angka.',
+                ]
+            ],
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // Get latest id
-        $last_id = $this->db->table('users')
-            ->select('id')->orderBy('id', 'desc')
-            ->limit(1)
-            ->get()
-            ->getResultArray();
+        // Save the user
+        $allowedPostFields = array_merge(['password'], $this->config->validFields, $this->config->personalFields);
+        $user = new User($this->request->getPost($allowedPostFields));
 
-        $password = $this->request->getPost('password') ?? '12345678';
-        $password_hash = Password::hash($password);
+        $this->config->requireActivation === null ? $user->activate() : $user->generateActivateHash();
 
-        $this->db->table('users')->insert([
-            'nama_lengkap' => $this->request->getPost('nama_lengkap'),
-            'email' => $this->request->getPost('email'),
-            'username' => $this->request->getPost('username'),
-            'no_telp' => $this->request->getPost('no_telp'),
-            'id_jabatan' => $this->request->getPost('positions'),
-            'id_jabatan' => $this->request->getPost('positions'),
-            'nip' => $this->request->getPost('nip'),
-            'password_hash' => $password_hash,
-            'active' => '1',
-            'created_at' => Time::now(),
-            'updated_at' => Time::now()
-        ]);
+        // Ensure default group gets assigned if set
+        if (!empty($this->config->defaultUserGroup)) {
+            $users = $users->withGroup($this->config->defaultUserGroup);
+        }
 
-        // Insert groups user
-        $this->db->table('auth_groups_users')->insert([
-            'group_id' => 2,
-            'user_id' => $last_id[0]['id'] + 1
-        ]);
+        if (!$users->save($user)) {
+            return redirect()->back()->withInput()->with('errors', $users->errors());
+        }
 
+        if ($this->config->requireActivation !== null) {
+            $activator = service('activator');
+            $sent = $activator->send($user);
+
+            if (!$sent) {
+                return redirect()->back()->withInput()->with('error', $activator->error() ?? lang('Auth.unknownError'));
+            }
+
+            // Success!
+            return redirect()->to(site_url('employees'))->with('success', 'Tambah data karyawan berhasil.');
+        }
+
+        // Success!
         return redirect()->to(site_url('employees'))->with('success', 'Tambah data karyawan berhasil.');
     }
 
     public function edit($id)
     {
-        $position = $this->db->table('jabatan')
-            ->where('id_jabatan', $id)
+        $employee = $this->db->table('users')
+            ->where('id', $id)
             ->get()
             ->getResultArray();
 
         return view('employees/edit', [
-            'position' => $position
+            'employee' => $employee,
+            'positions' => $this->db
+                ->query('SELECT * FROM jabatan')
+                ->getResultArray()
         ]);
     }
 
@@ -141,31 +158,77 @@ class EmployeeController extends BaseController
         }
 
         if (!$this->validate([
-            'nama_jabatan' => [
+            'nip' => [
+                'rules' => 'required|min_length[18]|numeric',
+                'errors' => [
+                    'required' => 'Kolom NIP harus diisi.',
+                    'min_length' => 'Kolom NIP harus berisi minimal 18 digit.',
+                    'numeric' => 'Kolom NIP harus berisi angka.',
+                ]
+            ],
+            'nama_lengkap' => [
                 'rules' => 'required',
                 'errors' => [
-                    'required' => 'Kolom Nama Jabatan harus diisi.',
+                    'required' => 'Kolom Nama Lengkap harus diisi.',
                 ]
-            ]
+            ],
+            'email' => [
+                'rules' => 'required|valid_email',
+                'errors' => [
+                    'required' => 'Kolom Email harus diisi.',
+                    'valid_email' => 'Kolom Email harus berisi format email.',
+                ]
+            ],
+            'username' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Kolom Username harus diisi.',
+                ]
+            ],
+            'no_telp' => [
+                'rules' => 'required|numeric|min_length[10]',
+                'errors' => [
+                    'required' => 'Kolom Nomor Telepon harus diisi.',
+                    'numeric' => 'Nomor Telepon harus berisi angka.',
+                    'min_length' => 'Nomor Telepon harus berisi minimal 10 angka.',
+                ]
+            ],
         ])) {
             return redirect()->back()->withInput();
         }
 
-        $this->db->table('jabatan')
-            ->where('id_jabatan', $this->request->getPost('id_jabatan'))
+        $passwordBeforeHash = $this->request->getPost('password');
+        if (strlen($passwordBeforeHash) == 0) {
+            $passwordBeforeHash = "12345678";
+        }
+        $password_hash = Password::hash($passwordBeforeHash);
+
+        $this->db->table('users')
+            ->where('id', $this->request->getPost('id'))
             ->update([
-                'nama_jabatan' => $this->request->getPost('nama_jabatan'),
+                'nama_lengkap' => $this->request->getPost('nama_lengkap'),
+                'email' => $this->request->getPost('email'),
+                'username' => $this->request->getPost('username'),
+                'no_telp' => $this->request->getPost('no_telp'),
+                'id_jabatan' => $this->request->getPost('positions'),
+                'nip' => $this->request->getPost('nip'),
+                'password_hash' => $password_hash,
                 'updated_at' => Time::now()
             ]);
 
-        return redirect()->to(site_url('employees'))->with('success', 'Ubah data jabatan berhasil.');
+        return redirect()->to(site_url('employees'))->with('success', 'Ubah data karyawan berhasil.');
     }
 
     public function destroy($id)
     {
-        $this->db->table('jabatan')->where('id_jabatan', $id)->delete();
+        if ($id == user_id()) {
+            return redirect()->to(site_url('employees'))->with('error', 'Anda tidak dapat menghapus data anda sendiri.');
+        }
 
-        session()->setFlashdata('success', 'Data jabatan berhasil dihapus.');
+        $this->db->table('auth_groups_users')->where('user_id', $id)->delete();
+        $this->db->table('users')->where('id', $id)->delete();
+
+        session()->setFlashdata('success', 'Data karyawan berhasil dihapus.');
 
         return redirect()->to(base_url('employees'));
     }

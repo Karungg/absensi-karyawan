@@ -109,7 +109,7 @@ Tambah Data Karyawan
                                 <sup class="text-danger">*</sup>
                             </label>
                             <div class="align-items-center">
-                                <select class="form-select" name="positions">
+                                <select class="form-select" name="id_jabatan">
                                     <?php foreach ($positions as $position) : ?>
                                         <option value="<?= $position['id_jabatan'] ?>"><?= $position['nama_jabatan'] ?></option>
                                     <?php endforeach ?>
