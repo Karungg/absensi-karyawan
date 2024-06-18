@@ -7,7 +7,7 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index', ['filter' => 'role:user']);
 
-$routes->group('', ['filter' => 'role:operator'], static function ($routes) {
+$routes->group('', ['filter' => 'role:admin'], static function ($routes) {
     // Dashboard
     $routes->get('dashboard', 'DashboardController::index');
 
@@ -21,5 +21,17 @@ $routes->group('', ['filter' => 'role:operator'], static function ($routes) {
         $routes->delete('delete/(:segment)', 'PositionController::destroy/$1');
         $routes->get('export-pdf', 'PositionController::exportPdf');
         $routes->get('export-excel', 'PositionController::exportExcel');
+    });
+
+    // Employees
+    $routes->group('employees', static function ($routes) {
+        $routes->get('', 'EmployeeController::index');
+        $routes->get('create', 'EmployeeController::create');
+        $routes->post('create', 'EmployeeController::store');
+        $routes->get('(:segment)/edit', 'EmployeeController::edit/$1');
+        $routes->put('(:segment)/edit', 'EmployeeController::update');
+        $routes->delete('delete/(:segment)', 'EmployeeController::destroy/$1');
+        $routes->get('export-pdf', 'EmployeeController::exportPdf');
+        $routes->get('export-excel', 'EmployeeController::exportExcel');
     });
 });

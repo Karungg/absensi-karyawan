@@ -15,7 +15,7 @@ class Auth extends \Myth\Auth\Config\Auth
      *
      * @var string
      */
-    public $defaultUserGroup;
+    public $defaultUserGroup = 'user';
 
     /**
      * --------------------------------------------------------------------
@@ -122,7 +122,7 @@ class Auth extends \Myth\Auth\Config\Auth
      *
      * @var string[]
      */
-    public $personalFields = [];
+    public $personalFields = ['nama_lengkap', 'no_telp', 'id_jabatan', 'nip'];
 
     /**
      * --------------------------------------------------------------------

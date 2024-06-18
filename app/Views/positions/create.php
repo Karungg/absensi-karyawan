@@ -1,5 +1,9 @@
 <?= $this->extend('layouts/app'); ?>
 
+<?= $this->section('title') ?>
+Tambah Data Jabatan
+<?= $this->endSection() ?>
+
 <?= $this->section('content'); ?>
 
 <?= $this->include('partials/navbar'); ?>

@@ -10,6 +10,10 @@
                     <span class="align-text-bottom"></span>
                     Jabatan
                 </a>
+                <a class="nav-link <?= str_contains(uri_string(), 'employees') ? '' : 'text-dark' ?>" href="<?= base_url('employees') ?>">
+                    <span class="align-text-bottom"></span>
+                    Karyawan
+                </a>
             </li>
         </ul>
 
