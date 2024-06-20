@@ -14,6 +14,10 @@
                     <span class="align-text-bottom"></span>
                     Karyawan
                 </a>
+                <a class="nav-link <?= str_contains(uri_string(), 'holidays') ? '' : 'text-dark' ?>" href="<?= base_url('holidays') ?>">
+                    <span class="align-text-bottom"></span>
+                    Hari Libur
+                </a>
             </li>
         </ul>
 

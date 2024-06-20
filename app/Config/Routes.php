@@ -35,4 +35,16 @@ $routes->group('', ['filter' => 'role:admin'], static function ($routes) {
         $routes->get('export-pdf', 'EmployeeController::exportPdf');
         $routes->get('export-excel', 'EmployeeController::exportExcel');
     });
+
+    // holidays
+    $routes->group('holidays', static function ($routes) {
+        $routes->get('', 'HolidayController::index');
+        $routes->get('create', 'HolidayController::create');
+        $routes->post('create', 'HolidayController::store');
+        $routes->get('(:segment)/edit', 'HolidayController::edit/$1');
+        $routes->put('(:segment)/edit', 'HolidayController::update');
+        $routes->delete('delete/(:segment)', 'HolidayController::destroy/$1');
+        $routes->get('export-pdf', 'HolidayController::exportPdf');
+        $routes->get('export-excel', 'HolidayController::exportExcel');
+    });
 });

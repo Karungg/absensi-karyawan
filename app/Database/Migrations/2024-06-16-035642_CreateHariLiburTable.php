@@ -23,6 +23,9 @@ class CreateHariLiburTable extends Migration
                 'type'       => 'VARCHAR',
                 'constraint'       => '50',
             ],
+            'keterangan' => [
+                'type'       => 'TEXT',
+            ],
             'tgl_hari_libur' => [
                 'type'       => 'DATE',
             ],
