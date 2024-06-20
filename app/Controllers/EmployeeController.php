@@ -7,9 +7,12 @@ use App\Entities\User;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\I18n\Time;
+use Dompdf\Dompdf;
 use Myth\Auth\Password;
 use \Myth\Auth\Authorization\GroupModel;
 use \Myth\Auth\Config\Auth as AuthConfig;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
 
 class EmployeeController extends BaseController
 {
@@ -45,6 +48,17 @@ class EmployeeController extends BaseController
             'positions' => $this->db
                 ->query('SELECT * FROM jabatan')
                 ->getResultArray()
+        ]);
+    }
+
+    public function show($id)
+    {
+        $employee = $this->db
+            ->query("SELECT users.id, users.username, users.nama_lengkap, users.email, users.no_telp, users.nip, jabatan.nama_jabatan FROM users JOIN jabatan ON users.id_jabatan=jabatan.id_jabatan WHERE users.id = $id")
+            ->getResultArray();
+
+        return view('employees/show', [
+            'employee' => $employee
         ]);
     }
 
@@ -235,10 +249,11 @@ class EmployeeController extends BaseController
 
     public function exportPdf()
     {
-        $filename = date('y-m-d') . '-data-jabatan';
+        $filename = date('y-m-d') . '-data-karyawan';
         $dompdf = new Dompdf();
         $dompdf->loadHtml(view('employees/export_pdf', [
-            'employees' => $this->db->query('SELECT * FROM jabatan')
+            'employees' => $this->db
+                ->query('SELECT users.id, users.username, users.nama_lengkap, users.email, users.no_telp, users.nip, jabatan.nama_jabatan FROM users JOIN jabatan ON users.id_jabatan=jabatan.id_jabatan')
                 ->getResultArray()
         ]));
         $dompdf->setPaper('A4', 'potrait');
@@ -249,24 +264,33 @@ class EmployeeController extends BaseController
     public function exportExcel()
     {
         $employees = $this->db
-            ->query('SELECT * FROM jabatan')
+            ->query('SELECT users.id, users.username, users.nama_lengkap, users.email, users.no_telp, users.nip, jabatan.nama_jabatan FROM users JOIN jabatan ON users.id_jabatan=jabatan.id_jabatan')
             ->getResultArray();
 
         $spreadsheet = new Spreadsheet();
         $spreadsheet->setActiveSheetIndex(0)
-            ->setCellValue('A1', 'Nama Jabatan');
+            ->setCellValue('A1', 'NIP')
+            ->setCellValue('B1', 'Nama Lengkap')
+            ->setCellValue('C1', 'Email')
+            ->setCellValue('D1', 'Username')
+            ->setCellValue('E1', 'Nomor Telepon')
+            ->setCellValue('F1', 'Jabatan');
 
         $column = 2;
         foreach ($employees as $data) {
             $spreadsheet->setActiveSheetIndex(0)
-                ->setCellValue('A' . $column, $data['nama_jabatan']);
+                ->setCellValue('A' . $column, $data['nip'])
+                ->setCellValue('B' . $column, $data['nama_lengkap'])
+                ->setCellValue('C' . $column, $data['email'])
+                ->setCellValue('D' . $column, $data['username'])
+                ->setCellValue('E' . $column, $data['no_telp'])
+                ->setCellValue('F' . $column, $data['nama_jabatan']);
             $column++;
         }
         $writer = new Xls($spreadsheet);
-        $fileName = date('d-m-y') . '-data-jabatan';
-
+        $filename = date('y-m-d') . '-data-karyawan';
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename=' . $fileName . '.xlsx');
+        header('Content-Disposition: attachment;filename=' . $filename . '.xlsx');
         header('Cache-Control: max-age=0');
 
         $writer->save('php://output');

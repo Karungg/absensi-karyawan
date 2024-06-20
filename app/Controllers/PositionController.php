@@ -137,10 +137,10 @@ class PositionController extends BaseController
             $column++;
         }
         $writer = new Xls($spreadsheet);
-        $fileName = date('d-m-y') . '-data-jabatan';
+        $filename = date('y-m-d') . '-data-jabatan';
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename=' . $fileName . '.xlsx');
+        header('Content-Disposition: attachment;filename=' . $filename . '.xlsx');
         header('Cache-Control: max-age=0');
 
         $writer->save('php://output');

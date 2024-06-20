@@ -28,6 +28,7 @@ $routes->group('', ['filter' => 'role:admin'], static function ($routes) {
         $routes->get('', 'EmployeeController::index');
         $routes->get('create', 'EmployeeController::create');
         $routes->post('create', 'EmployeeController::store');
+        $routes->get('(:num)', 'EmployeeController::show/$1');
         $routes->get('(:segment)/edit', 'EmployeeController::edit/$1');
         $routes->put('(:segment)/edit', 'EmployeeController::update');
         $routes->delete('delete/(:segment)', 'EmployeeController::destroy/$1');
