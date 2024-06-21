@@ -109,6 +109,11 @@ class PositionController extends BaseController
 
     public function exportPdf()
     {
+        $positions = $this->db->table('jabatan')->countAll();
+        if ($positions <= 0) {
+            return redirect()->to(site_url('positions'))->with('error', 'Tidak ada data yang dapat diexport.');
+        }
+
         $filename = date('y-m-d') . '-data-jabatan';
         $dompdf = new Dompdf();
         $dompdf->loadHtml(view('positions/export_pdf', [
@@ -122,6 +127,11 @@ class PositionController extends BaseController
 
     public function exportExcel()
     {
+        $positions = $this->db->table('jabatan')->countAll();
+        if ($positions <= 0) {
+            return redirect()->to(site_url('positions'))->with('error', 'Tidak ada data yang dapat diexport.');
+        }
+
         $positions = $this->db
             ->query('SELECT * FROM jabatan')
             ->getResultArray();

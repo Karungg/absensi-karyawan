@@ -138,6 +138,11 @@ class HolidayController extends BaseController
 
     public function exportPdf()
     {
+        $holidays = $this->db->table('hari_libur')->countAll();
+        if ($holidays <= 0) {
+            return redirect()->to(site_url('holidays'))->with('error', 'Tidak ada data yang dapat diexport.');
+        }
+
         $filename = date('y-m-d') . '-data-hari-libur';
         $dompdf = new Dompdf();
         $dompdf->loadHtml(view('holidays/export_pdf', [
@@ -151,6 +156,11 @@ class HolidayController extends BaseController
 
     public function exportExcel()
     {
+        $holidays = $this->db->table('hari_libur')->countAll();
+        if ($holidays <= 0) {
+            return redirect()->to(site_url('holidays'))->with('error', 'Tidak ada data yang dapat diexport.');
+        }
+
         $holidays = $this->db
             ->query('SELECT * FROM hari_libur')
             ->getResultArray();

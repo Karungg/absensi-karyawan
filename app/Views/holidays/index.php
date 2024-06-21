@@ -32,6 +32,12 @@ Hari Libur
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 <?php endif ?>
+                <?php if (!empty(session()->getFlashdata('error'))) : ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <?= session()->getFlashdata('error') ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php endif ?>
                 <div class="mb-2">
                     <a href="<?= base_url('holidays/export-pdf') ?>" class="btn btn-danger">Export Pdf</a>
                     <a href="<?= base_url('holidays/export-excel') ?>" class="btn btn-success">Export Excel</a>

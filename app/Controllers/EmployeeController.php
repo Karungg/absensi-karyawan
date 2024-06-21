@@ -249,6 +249,11 @@ class EmployeeController extends BaseController
 
     public function exportPdf()
     {
+        $employees = $this->db->table('users')->countAll();
+        if ($employees <= 0) {
+            return redirect()->to(site_url('employees'))->with('error', 'Tidak ada data yang dapat diexport.');
+        }
+
         $filename = date('y-m-d') . '-data-karyawan';
         $dompdf = new Dompdf();
         $dompdf->loadHtml(view('employees/export_pdf', [
@@ -263,6 +268,11 @@ class EmployeeController extends BaseController
 
     public function exportExcel()
     {
+        $employees = $this->db->table('users')->countAll();
+        if ($employees <= 0) {
+            return redirect()->to(site_url('employees'))->with('error', 'Tidak ada data yang dapat diexport.');
+        }
+
         $employees = $this->db
             ->query('SELECT users.id, users.username, users.nama_lengkap, users.email, users.no_telp, users.nip, jabatan.nama_jabatan FROM users JOIN jabatan ON users.id_jabatan=jabatan.id_jabatan')
             ->getResultArray();
