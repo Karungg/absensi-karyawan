@@ -18,6 +18,10 @@
                     <span class="align-text-bottom"></span>
                     Hari Libur
                 </a>
+                <a class="nav-link <?= str_contains(uri_string(), 'attendances') ? '' : 'text-dark' ?>" href="<?= base_url('attendances') ?>">
+                    <span class="align-text-bottom"></span>
+                    Data Absensi
+                </a>
             </li>
         </ul>
 

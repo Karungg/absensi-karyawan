@@ -49,7 +49,7 @@ Tambah Data Hari Libur
                                 <sup class="text-danger">*</sup>
                             </label>
                             <div class="align-items-center">
-                                <input type="text" class="form-control <?= (isset($errors['keterangan'])) ? 'is-invalid' : '' ?>" name="keterangan" id="keterangan" placeholder="Nama Hari Libur" value="<?= old('keterangan') ?>">
+                                <input type="text" class="form-control <?= (isset($errors['keterangan'])) ? 'is-invalid' : '' ?>" name="keterangan" id="keterangan" placeholder="Keterangan" value="<?= old('keterangan') ?>">
                                 <div class="invalid-feedback">
                                     <?= validation_show_error('keterangan') ?>
                                 </div>

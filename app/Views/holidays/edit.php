@@ -17,7 +17,7 @@ Edit Data Hari Libur
                 <h1 class="h2">Edit Data Hari Libur</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div>
-                        <a href="<?= base_url('holidyas') ?>" class="btn btn-sm btn-primary">
+                        <a href="<?= base_url('holidays') ?>" class="btn btn-sm btn-primary">
                             <span class="align-text-bottom"></span>
                             Kembali
                         </a>

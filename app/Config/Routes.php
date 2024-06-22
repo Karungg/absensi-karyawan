@@ -5,7 +5,7 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index', ['filter' => 'role:user']);
+$routes->get('/', 'Home::index');
 
 $routes->group('', ['filter' => 'role:admin'], static function ($routes) {
     // Dashboard
@@ -46,5 +46,17 @@ $routes->group('', ['filter' => 'role:admin'], static function ($routes) {
         $routes->delete('delete/(:segment)', 'HolidayController::destroy/$1');
         $routes->get('export-pdf', 'HolidayController::exportPdf');
         $routes->get('export-excel', 'HolidayController::exportExcel');
+    });
+
+    // attendances
+    $routes->group('attendances', static function ($routes) {
+        $routes->get('', 'AttendanceController::index');
+        $routes->get('create', 'AttendanceController::create');
+        $routes->post('create', 'AttendanceController::store');
+        $routes->get('(:segment)/edit', 'AttendanceController::edit/$1');
+        $routes->put('(:segment)/edit', 'AttendanceController::update');
+        $routes->delete('delete/(:segment)', 'AttendanceController::destroy/$1');
+        $routes->get('export-pdf', 'AttendanceController::exportPdf');
+        $routes->get('export-excel', 'AttendanceController::exportExcel');
     });
 });

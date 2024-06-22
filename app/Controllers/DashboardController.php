@@ -19,7 +19,8 @@ class DashboardController extends BaseController
         return view('dashboard/index', [
             'title' => 'Dashboard',
             'employees' => $this->db->table('users')->countAll(),
-            'positions' => $this->db->table('jabatan')->countAll()
+            'positions' => $this->db->table('jabatan')->countAll(),
+            'attendances' => $this->db->table('jadwal_absen')->countAll()
         ]);
     }
 }
