@@ -81,13 +81,7 @@ class AttendanceController extends BaseController
                     'required' => 'Kolom Batas Absen Pulang harus diisi.',
                     'valid_date' => 'Kolom Batas Absen Pulang harus diisi sesuai format.',
                 ]
-            ],
-            'id_jabatan' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Kolom Jabatan harus diisi.',
-                ]
-            ],
+            ]
         ])) {
             return redirect()->back()->withInput();
         }
@@ -105,11 +99,11 @@ class AttendanceController extends BaseController
         ]);
 
         $attendanceId = $attendance->getInsertID();
-        $positionId = $this->request->getPost('id_jabatan');
+        $positionIds = $this->request->getPost('id_jabatan');
 
         $this->db->table('detail_jadwal_absen')->insert([
             'id_jadwal_absen' => $attendanceId,
-            'id_jabatan' => $positionId
+            'id_jabatan' => $positionIds
         ]);
 
         return redirect()->to(site_url('attendances'))->with('success', 'Tambah data absensi berhasil.');
@@ -177,7 +171,7 @@ class AttendanceController extends BaseController
                     'valid_date' => 'Kolom Batas Absen Pulang harus diisi sesuai format.',
                 ]
             ],
-            'id_jabatan' => [
+            'id_jabatan[]' => [
                 'rules' => 'required',
                 'errors' => [
                     'required' => 'Kolom Jabatan harus diisi.',
@@ -186,6 +180,8 @@ class AttendanceController extends BaseController
         ])) {
             return redirect()->back()->withInput();
         }
+
+        $positionIds[] = $this->request->getPost('id_jabatan');
 
         $this->db->table('jadwal_absen')
             ->where('id_jadwal_absen', $this->request->getPost('id_jadwal_absen'))

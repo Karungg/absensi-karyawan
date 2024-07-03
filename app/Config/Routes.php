@@ -59,4 +59,16 @@ $routes->group('', ['filter' => 'role:admin'], static function ($routes) {
         $routes->get('export-pdf', 'AttendanceController::exportPdf');
         $routes->get('export-excel', 'AttendanceController::exportExcel');
     });
+
+    // presences
+    $routes->group('presences', static function ($routes) {
+        $routes->get('', 'PresenceController::index');
+        $routes->get('create', 'PresenceController::create');
+        $routes->post('create', 'PresenceController::store');
+        $routes->get('(:segment)/edit', 'PresenceController::edit/$1');
+        $routes->put('(:segment)/edit', 'PresenceController::update');
+        $routes->delete('delete/(:segment)', 'PresenceController::destroy/$1');
+        $routes->get('export-pdf', 'PresenceController::exportPdf');
+        $routes->get('export-excel', 'PresenceController::exportExcel');
+    });
 });

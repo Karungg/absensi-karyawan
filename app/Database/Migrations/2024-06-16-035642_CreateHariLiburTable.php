@@ -15,10 +15,6 @@ class CreateHariLiburTable extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'id_jadwal_absen' => [
-                'type'       => 'INT',
-                'constraint' => '11',
-            ],
             'nama_hari_libur' => [
                 'type'       => 'VARCHAR',
                 'constraint'       => '50',

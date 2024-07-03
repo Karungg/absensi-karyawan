@@ -47,7 +47,7 @@ Tambah Data Absensi
                                     Keterangan
                                     <sup class="text-danger">*</sup>
                                 </label>
-                                <textarea name="deskripsi" id="deskripsi" class="form-control <?= (isset($errors['deskripsi'])) ? 'is-invalid' : '' ?>"></textarea>
+                                <textarea name="deskripsi" id="deskripsi" class="form-control <?= (isset($errors['deskripsi'])) ? 'is-invalid' : '' ?>"><?= old('deskripsi') ?></textarea>
                                 <div class="invalid-feedback">
                                     <?= validation_show_error('deskripsi') ?>
                                 </div>
@@ -104,19 +104,19 @@ Tambah Data Absensi
                             </div>
 
                             <div class="mb-3">
-                                <label for="id_jabatan" class="form-label fw-bold">
+                                <label for="id_jabatan[]" class="form-label fw-bold">
                                     Jabatan
                                     <sup class="text-danger">*</sup>
                                 </label>
                                 <div class="row ms-1">
                                     <?php foreach ($positions as $position) : ?>
                                         <div class="form-check form-check-inline col-sm-4">
-                                            <input class="form-check-input" type="checkbox" name="id_jabatan" id="<?= $position['nama_jabatan'] ?>" value="<?= $position['id_jabatan'] ?>">
+                                            <input class="form-check-input" type="checkbox" name="id_jabatan[]" id="<?= $position['nama_jabatan'] ?>" value="<?= $position['id_jabatan'] ?>">
                                             <label class="form-check-label" for="<?= $position['nama_jabatan'] ?>"><?= $position['nama_jabatan'] ?></label>
                                         </div>
                                     <?php endforeach ?>
                                 </div>
-                                <?php if (isset($errors['id_jabatan'])) : ?>
+                                <?php if (isset($errors['id_jabatan[]'])) : ?>
                                     <small class="text-danger d-block mt-1">Kolom jabatan karyawan harus diisi setidaknya 1.</small>
                                 <?php endif ?>
                                 <small class="text-muted d-block mt-1">Pilih jabatan karyawan yang akan menggunakan absensi ini.</small>

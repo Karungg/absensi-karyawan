@@ -22,6 +22,10 @@
                     <span class="align-text-bottom"></span>
                     Data Absensi
                 </a>
+                <a class="nav-link <?= str_contains(uri_string(), 'presences') ? '' : 'text-dark' ?>" href="<?= base_url('presences') ?>">
+                    <span class="align-text-bottom"></span>
+                    Data Kehadiran
+                </a>
             </li>
         </ul>
 
