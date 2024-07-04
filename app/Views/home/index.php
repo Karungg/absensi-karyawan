@@ -9,15 +9,21 @@
                     Daftar Absensi Hari Ini
                 </div>
                 <div class="card-body">
-                    <ul class="list-group">
-                        <a href="#" class="list-group-item d-flex justify-content-between align-items-start py-3">
-                            <div class="ms-2 me-auto">
-                                <div class="fw-bold">Title</div>
-                                <p class="mb-0">Description</p>
-                            </div>
-                            <?= $this->include('partials/attendance-badges'); ?>
-                        </a>
-                    </ul>
+                    <?php
+
+                    use CodeIgniter\I18n\Time;
+
+                    foreach ($attendances as $attendance) : ?>
+                        <ul class="list-group">
+                            <a href="#" class="list-group-item d-flex justify-content-between align-items-start py-3">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold"><?= $attendance['nama_jadwal'] ?></div>
+                                    <p class="mb-0"><?= $attendance['deskripsi'] ?></p>
+                                </div>
+                                <?= $this->include('partials/attendance-badges'); ?>
+                            </a>
+                        </ul>
+                    <?php endforeach ?>
                 </div>
             </div>
         </div>
@@ -30,19 +36,20 @@
                     <ul class="ps-3">
                         <li class="mb-1">
                             <span class="fw-bold d-block">Nama : </span>
-                            <span>User</span>
+                            <span><?= user()->nama_lengkap ?></span>
                         </li>
                         <li class="mb-1">
                             <span class="fw-bold d-block">Email : </span>
-                            <a href="mailto:user@gmail.com">user@gmail.com</a>
+                            <a href="mailto:<?= user()->email ?>"><?= user()->email ?></a>
                         </li>
                         <li class="mb-1">
                             <span class="fw-bold d-block">No. Telp : </span>
-                            <a href="tel:089531852238">089531852238</a>
+                            <a href="tel:<?= user()->no_telp ?>"><?= user()->no_telp ?></a>
                         </li>
                         <li class="mb-1">
                             <span class="fw-bold d-block">Bergabung Pada : </span>
-                            <span>10 Mei 2024</span>
+                            <?php $created_at = Time::parse(user()->created_at, 'Asia/Jakarta') ?>
+                            <span><?= $created_at->humanize() ?></span>
                         </li>
                     </ul>
                 </div>
