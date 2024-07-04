@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\Attendance;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\I18n\Time;
 use Dompdf\Dompdf;
@@ -86,6 +87,10 @@ class AttendanceController extends BaseController
             return redirect()->back()->withInput();
         }
 
+        if ($this->request->getPost('id_jabatan') == null) {
+            return redirect()->back()->withInput();
+        }
+
         $attendance = new \App\Models\Attendance();
         $attendance->insert([
             'nama_jadwal' => $this->request->getPost('nama_jadwal'),
@@ -101,10 +106,14 @@ class AttendanceController extends BaseController
         $attendanceId = $attendance->getInsertID();
         $positionIds = $this->request->getPost('id_jabatan');
 
-        $this->db->table('detail_jadwal_absen')->insert([
-            'id_jadwal_absen' => $attendanceId,
-            'id_jabatan' => $positionIds
-        ]);
+        foreach ($positionIds as $positionId) {
+            $this->db->table('detail_jadwal_absen')->insert([
+                'id_jadwal_absen' => $attendanceId,
+                'id_jabatan' => $positionId,
+                'created_at' => Time::now(),
+                'updated_at' => Time::now()
+            ]);
+        }
 
         return redirect()->to(site_url('attendances'))->with('success', 'Tambah data absensi berhasil.');
     }
@@ -116,11 +125,23 @@ class AttendanceController extends BaseController
             ->get()
             ->getResultArray();
 
+        $positionIds = $this->db->table('detail_jadwal_absen')
+            ->join('jabatan', 'jabatan.id_jabatan = detail_jadwal_absen.id_jabatan')
+            ->where('id_jadwal_absen', $id)
+            ->get()
+            ->getResultArray();
+
+        $position_name = [];
+        foreach ($positionIds as $position) {
+            $position_name[] = $position['nama_jabatan'];
+        }
+
         $positions = $this->db->query("SELECT * FROM jabatan")->getResultArray();
 
         return view('attendances/edit', [
             'attendance' => $attendance,
-            'positions' => $positions
+            'positions' => $positions,
+            'positionIds' => implode(', ', $position_name)
         ]);
     }
 
@@ -171,20 +192,14 @@ class AttendanceController extends BaseController
                     'valid_date' => 'Kolom Batas Absen Pulang harus diisi sesuai format.',
                 ]
             ],
-            'id_jabatan[]' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Kolom Jabatan harus diisi.',
-                ]
-            ],
         ])) {
             return redirect()->back()->withInput();
         }
 
-        $positionIds[] = $this->request->getPost('id_jabatan');
+        $id_jadwal_absen = $this->request->getPost('id_jadwal_absen');
 
         $this->db->table('jadwal_absen')
-            ->where('id_jadwal_absen', $this->request->getPost('id_jadwal_absen'))
+            ->where('id_jadwal_absen', $id_jadwal_absen)
             ->update([
                 'nama_jadwal' => $this->request->getPost('nama_jadwal'),
                 'deskripsi' => $this->request->getPost('deskripsi'),
@@ -194,6 +209,23 @@ class AttendanceController extends BaseController
                 'batas_jam_pulang' => $this->request->getPost('batas_jam_pulang'),
                 'updated_at' => Time::now()
             ]);
+
+        $positionIds = $this->request->getPost('id_jabatan');
+
+        if ($positionIds != null) {
+            $this->db->table('detail_jadwal_absen')
+                ->where('id_jadwal_absen', $id_jadwal_absen)
+                ->delete();
+
+            foreach ($positionIds as $positionId) {
+                $this->db->table('detail_jadwal_absen')->insert([
+                    'id_jadwal_absen' => $id_jadwal_absen,
+                    'id_jabatan' => $positionId,
+                    'updated_at' => Time::now()
+                ]);
+            }
+        }
+
 
         return redirect()->to(site_url('attendances'))->with('success', 'Ubah data absensi berhasil.');
     }

@@ -61,7 +61,7 @@ Edit Data Absensi
                                             Absen Masuk
                                             <sup class="text-danger">*</sup>
                                         </label>
-                                        <input type="text" class="form-control <?= (isset($errors['jam_masuk'])) ? 'is-invalid' : '' ?>" name="jam_masuk" id="jam_masuk" placeholder="07:00" value="<?= $attendance[0]['jam_masuk'] ?>" maxlength="5">
+                                        <input type="text" class="form-control <?= (isset($errors['jam_masuk'])) ? 'is-invalid' : '' ?>" name="jam_masuk" id="jam_masuk" placeholder="07:00" value="<?= substr($attendance[0]['jam_masuk'], 0, -3)  ?>" maxlength="5">
                                         <div class="invalid-feedback">
                                             <?= validation_show_error('jam_masuk') ?>
                                         </div>
@@ -71,7 +71,7 @@ Edit Data Absensi
                                             Batas Absen Masuk
                                             <sup class="text-danger">*</sup>
                                         </label>
-                                        <input type="text" class="form-control <?= (isset($errors['batas_jam_masuk'])) ? 'is-invalid' : '' ?>" name="batas_jam_masuk" id="batas_jam_masuk" placeholder="08:00" value="<?= $attendance[0]['batas_jam_masuk'] ?>" maxlength="5">
+                                        <input type="text" class="form-control <?= (isset($errors['batas_jam_masuk'])) ? 'is-invalid' : '' ?>" name="batas_jam_masuk" id="batas_jam_masuk" placeholder="08:00" value="<?= substr($attendance[0]['batas_jam_masuk'], 0, -3) ?>" maxlength="5">
                                         <div class="invalid-feedback">
                                             <?= validation_show_error('batas_jam_masuk') ?>
                                         </div>
@@ -86,7 +86,7 @@ Edit Data Absensi
                                             Absen Pulang
                                             <sup class="text-danger">*</sup>
                                         </label>
-                                        <input type="text" class="form-control <?= (isset($errors['jam_pulang'])) ? 'is-invalid' : '' ?>" name="jam_pulang" id="jam_pulang" placeholder="16:00" value="<?= $attendance[0]['jam_pulang'] ?>" maxlength="5">
+                                        <input type="text" class="form-control <?= (isset($errors['jam_pulang'])) ? 'is-invalid' : '' ?>" name="jam_pulang" id="jam_pulang" placeholder="16:00" value="<?= substr($attendance[0]['jam_pulang'], 0, -3)  ?>" maxlength="5">
                                         <div class="invalid-feedback">
                                             <?= validation_show_error('jam_pulang') ?>
                                         </div>
@@ -96,7 +96,7 @@ Edit Data Absensi
                                             Batas Absen Pulang
                                             <sup class="text-danger">*</sup>
                                         </label>
-                                        <input type="text" class="form-control <?= (isset($errors['batas_jam_pulang'])) ? 'is-invalid' : '' ?>" name="batas_jam_pulang" id="batas_jam_pulang" placeholder="17:00" value="<?= $attendance[0]['batas_jam_pulang'] ?>" maxlength="5">
+                                        <input type="text" class="form-control <?= (isset($errors['batas_jam_pulang'])) ? 'is-invalid' : '' ?>" name="batas_jam_pulang" id="batas_jam_pulang" placeholder="17:00" value="<?= substr($attendance[0]['batas_jam_pulang'], 0, -3)  ?>" maxlength="5">
                                         <div class="invalid-feedback">
                                             <?= validation_show_error('batas_jam_pulang') ?>
                                         </div>
@@ -113,7 +113,7 @@ Edit Data Absensi
                                 <div class="row ms-1">
                                     <?php foreach ($positions as $position) : ?>
                                         <div class="form-check form-check-inline col-sm-4">
-                                            <input class="form-check-input" type="checkbox" name="id_jabatan" id="<?= $position['nama_jabatan'] ?>" value="<?= $position['id_jabatan'] ?>">
+                                            <input class="form-check-input" type="checkbox" name="id_jabatan[]" id="<?= $position['nama_jabatan'] ?>" value="<?= $position['id_jabatan'] ?>">
                                             <label class="form-check-label" for="<?= $position['nama_jabatan'] ?>"><?= $position['nama_jabatan'] ?></label>
                                         </div>
                                     <?php endforeach ?>
@@ -122,6 +122,8 @@ Edit Data Absensi
                                     <small class="text-danger d-block mt-1">Kolom jabatan karyawan harus diisi setidaknya 1.</small>
                                 <?php endif ?>
                                 <small class="text-muted d-block mt-1">Pilih jabatan karyawan yang akan menggunakan absensi ini.</small>
+                                <small class="d-block mt-1">Jabatan saat ini : </small>
+                                <small class="d-block mt-1"><?= $positionIds ?>.</small>
                             </div>
 
                         </div>
