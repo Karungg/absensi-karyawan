@@ -34,20 +34,20 @@ Data Kehadiran
                                         <p class="mb-0"><?= $attendance['deskripsi'] ?></p>
                                     </div>
                                     <?php
-                                    $now = Time::now();
-                                    $start_time = Time::parse($attendance['jam_masuk']);
-                                    $limit_start_time = Time::parse($attendance['batas_jam_masuk']);
-                                    $end_time = Time::parse($attendance['jam_pulang']);
-                                    $limit_end_time = Time::parse($attendance['batas_jam_pulang']);
+                                    $now = Time::now()->toTimeString();
+                                    $start_time = Time::parse($attendance['jam_masuk'])->toTimeString();
+                                    $limit_start_time = Time::parse($attendance['batas_jam_masuk'])->toTimeString();
+                                    $end_time = Time::parse($attendance['jam_pulang'])->toTimeString();
+                                    $limit_end_time = Time::parse($attendance['batas_jam_pulang'])->toTimeString();
                                     ?>
                                     <?php
                                     if (!empty($holiday)) { ?>
                                         <span class="badge text-bg-success rounded-pill">Hari Libur</span>
                                     <?php } else { ?>
 
-                                        <?php if ($start_time >= $now && $limit_start_time <= $now) { ?>
+                                        <?php if ($start_time <= $now && $limit_start_time >= $now) { ?>
                                             <span class="badge bg-primary rounded-pill">Jam Masuk</span>
-                                        <?php } elseif ($end_time >= $now && $limit_end_time <= $now) {  ?>
+                                        <?php } elseif ($end_time <= $now && $limit_end_time >= $now) {  ?>
                                             <span class="badge text-bg-warning rounded-pill">Jam Pulang</span>
                                         <?php } else { ?>
                                             <span class="badge text-bg-danger rounded-pill">Tutup</span>
