@@ -1,68 +1,63 @@
-# CodeIgniter 4 Application Starter
+# Project Absensi Karyawan
 
-## What is CodeIgniter?
+## Deskripsi
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+Project absensi karyawan adalah hasil riset pada salah satu perusahaan di bogor yang beroperasi di bidang manufaktur. Tujuan pembuatan project ini adalah sebagai saran untuk perusahaan tersebut untuk metode absensi karyawan yang lebih baik dan efisien menggunakan website.
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## Fitur Utama Berdasarkan Role (Admin, Karyawan)
+1. **Admin**
+    - Manajemen data karyawan
+    - Manajemen hari libur
+    - Manajemen jabatan
+    - Manajemen kehadiran
+    - Membuat laporan kehadiran
+2. **Karyawan**
+    - Melakukan kehadiran
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+## 🛠️ Techstack
+![Code-Igniter](https://img.shields.io/badge/CodeIgniter-%23EF4223.svg?style=for-the-badge&logo=codeIgniter&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![Bootstrap](https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white) 	![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+## 🛠️ Cara Instalasi
 
-## Installation & updates
+Ikuti langkah-langkah berikut untuk menjalankan proyek ini secara lokal:
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+1. **Clone repository**
+```bash
+git clone https://github.com/Karungg/absensi-karyawan.git
+cd absensi-karyawan
+```
+2. **Install dependensi menggunakan composer**
+```
+composer install
+```
+3. **Copy .env**
+```
+cp env .env
+```
+4. **Ubah konfigurasi pada file .env sesuai kebutuhan**
+```
+database.default.hostname = 
+database.default.database = 
+database.default.username = 
+database.default.password = 
+database.default.DBDriver = 
+database.default.DBPrefix =
+database.default.port = 
+```
+5. **Jalankan migrasi dan seeder**
+```
+php spark migrate --all
+php spark db:seed DatabaseSeeder
+```
+6. **Jalankan aplikasi**
+```
+php spark serve
+```
+Buka aplikasi di browser <a href="http://localhost:8080/">http://localhost:8080</a>
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+👨‍💻 Developer
+Created with ❤️ by <a href="https://github.com/Karungg">Karungg</a>
 
-## Setup
+## 📄 Lisensi
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
-
-## Important Change with index.php
-
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
-
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
-
-**Please** read the user guide for a better explanation of how CI4 works!
-
-## Repository Management
-
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
-
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
-
-## Server Requirements
-
-PHP version 8.1 or higher is required, with the following extensions installed:
-
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-
-> [!WARNING]
-> The end of life date for PHP 7.4 was November 28, 2022.
-> The end of life date for PHP 8.0 was November 26, 2023.
-> If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> The end of life date for PHP 8.1 will be November 25, 2024.
-
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+Proyek ini dilisensikan di bawah [MIT License](<a href="https://github.com/Karungg/absensi-karyawan?tab=MIT-1-ov-file">LICENSE</a>).
